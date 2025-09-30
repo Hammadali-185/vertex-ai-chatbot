@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pymongo
+motor
+pydantic
+httpx
+python-dotenv
+streamlit
