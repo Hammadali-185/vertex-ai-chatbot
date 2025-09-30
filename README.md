@@ -229,4 +229,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Made with ❤️ by Vertex AI Tech**
+**Made with ❤️ by Hammad ALi**
