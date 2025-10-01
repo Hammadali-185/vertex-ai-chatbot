@@ -1,31 +1,54 @@
-# 🤖 Vertex AI Tech WhatsApp Bot
+# 🤖 Vertex AI Tech Customer Support Platform
 
-A sophisticated WhatsApp chatbot powered by LLaMA AI that provides intelligent customer support and lead generation for Vertex AI Tech services.
+A comprehensive customer support platform featuring both a **Web Chat Bot** and **WhatsApp Bot** powered by LLaMA AI. This dual-bot system provides intelligent customer support, lead generation, and seamless communication across multiple channels for Vertex AI Tech services.
 
 ## ✨ Features
 
-- **🤖 AI-Powered Responses**: Uses LLaMA model via Groq API for intelligent conversations
+### 🌐 **Web Chat Bot**
+- **🤖 AI-Powered Web Interface**: Interactive chat interface with LLaMA AI responses
+- **💾 Persistent Chat History**: Local storage for conversation continuity
+- **🎨 Modern UI/UX**: Dark theme with responsive design
+- **⚡ Real-time Messaging**: Instant responses with typing indicators
+- **🔄 Chat Management**: Clear chat history and session management
+
+### 📱 **WhatsApp Bot**
 - **📱 WhatsApp Integration**: Seamless WhatsApp messaging via WhatsSMS API
+- **🤖 AI-Powered Responses**: Uses LLaMA model via Groq API for intelligent conversations
 - **👥 Team Notifications**: Automatic team alerts for pricing inquiries and project finalizations
 - **💬 Conversation Management**: Persistent conversation history with MongoDB
-- **🌐 Web Interface**: React-based frontend for testing and management
+- **🔒 Webhook Security**: Secure webhook handling with secret verification
+
+### 🛠️ **Shared Platform Features**
 - **🔒 Secure**: Environment-based configuration with no hardcoded secrets
 - **📊 Real-time Processing**: Fast response times with async processing
+- **🌐 Docker Support**: Production-ready containerization
+- **📈 Lead Management**: Automated lead capture and follow-up
+- **🎫 Support Tickets**: Integrated support ticket system
 
 ## 🏗️ Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   WhatsApp      │    │   FastAPI       │    │   LLaMA AI      │
-│   (WhatsSMS)    │◄──►│   Backend       │◄──►│   (Groq API)    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                              │
-                              ▼
-                       ┌─────────────────┐
-                       │   MongoDB       │
-                       │   Database      │
-                       └─────────────────┘
+│   Web Chat      │    │                 │    │   WhatsApp      │
+│   (React)       │    │   FastAPI       │    │   (WhatsSMS)    │
+└─────────────────┘    │   Backend       │    └─────────────────┘
+         │              │                 │             │
+         └──────────────►│                 │◄────────────┘
+                        │                 │
+                        │                 │
+                        ▼                 ▼
+                 ┌─────────────────┐    ┌─────────────────┐
+                 │   LLaMA AI      │    │   MongoDB       │
+                 │   (Groq API)    │    │   Database      │
+                 └─────────────────┘    └─────────────────┘
 ```
+
+### 🔄 **Dual Bot System Flow**
+
+1. **Web Chat Bot**: Users interact through the React frontend → FastAPI backend → LLaMA AI
+2. **WhatsApp Bot**: Users send WhatsApp messages → WhatsSMS webhook → FastAPI backend → LLaMA AI
+3. **Shared Backend**: Both bots use the same FastAPI backend and AI processing
+4. **Unified Database**: All conversations and leads stored in MongoDB
 
 ## 🚀 Quick Start
 
@@ -66,8 +89,10 @@ A sophisticated WhatsApp chatbot powered by LLaMA AI that provides intelligent c
    ```
 
 5. **Start Services**
+
+   **Option A: Traditional Setup**
    ```bash
-   # Terminal 1: Start ngrok
+   # Terminal 1: Start ngrok (for WhatsApp webhook)
    ngrok http 8000
    
    # Terminal 2: Start FastAPI backend
@@ -75,6 +100,17 @@ A sophisticated WhatsApp chatbot powered by LLaMA AI that provides intelligent c
    python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
    
    # Terminal 3: Start React frontend
+   cd src
+   npm start
+   ```
+
+   **Option B: Docker Setup (Recommended)**
+   ```bash
+   # Start backend with Docker
+   cd chatbot
+   docker-compose up --build
+   
+   # Start frontend (separate terminal)
    cd src
    npm start
    ```
@@ -110,34 +146,63 @@ WEBHOOK_SECRET=your_webhook_secret
 
 ## 📱 Usage
 
-### WhatsApp Bot
+### 🌐 **Web Chat Bot**
 
-1. Send a message to your bot's WhatsApp number
-2. Bot will respond with AI-powered messages
-3. Team gets notified for pricing inquiries
-4. Conversations are saved in MongoDB
+1. **Access the Web Interface**: Open http://localhost:3000
+2. **Start Chatting**: Type your questions about AI services, products, or support
+3. **AI Responses**: Get instant AI-powered responses from LLaMA
+4. **Chat History**: Your conversation is automatically saved locally
+5. **Clear Chat**: Use the clear button to start a new conversation
 
-### Web Interface
+**Features:**
+- Real-time typing indicators
+- Persistent chat history
+- Modern dark theme UI
+- Mobile-responsive design
 
-- **Frontend**: http://localhost:3000
-- **API Docs**: http://localhost:8000/docs
-- **API Endpoint**: http://localhost:8000/chat
+### 📱 **WhatsApp Bot**
+
+1. **Send Message**: Send a message to your bot's WhatsApp number
+2. **AI Response**: Bot responds with intelligent AI-powered messages
+3. **Team Notifications**: Team gets notified for pricing inquiries and project finalizations
+4. **Conversation Tracking**: All conversations are saved in MongoDB
+5. **Lead Generation**: Automatic lead capture and follow-up
+
+**Features:**
+- Webhook-based message processing
+- Message classification and routing
+- Team notification system
+- Conversation management
+
+### 🔗 **Access Points**
+
+- **Web Chat Interface**: http://localhost:3000
+- **API Documentation**: http://localhost:8000/docs
+- **Health Check**: http://localhost:8000/health
+- **Webhook Endpoint**: http://localhost:8000/webhook
 
 ## 🔧 API Endpoints
 
-### Chat Endpoints
-- `POST /chat` - Send message to AI
-- `POST /webhook` - WhatsApp webhook
-- `GET /webhook` - Webhook verification
+### 🌐 **Web Chat Endpoints**
+- `POST /chat` - Send message to AI (used by web interface)
+- `GET /health` - Health check endpoint
+- `GET /` - Root endpoint with service info
 
-### Bot Management
-- `POST /bot/send` - Send WhatsApp message
-- `GET /bot/conversation/{phone}` - Get conversation
+### 📱 **WhatsApp Bot Endpoints**
+- `POST /webhook` - WhatsApp webhook (receives incoming messages)
+- `GET /webhook` - Webhook verification endpoint
+- `POST /bot/send` - Send WhatsApp message manually
+- `GET /bot/conversation/{phone}` - Get conversation history
 - `POST /bot/notify-team` - Send team notification
+- `POST /test-bot` - Test bot functionality
 
-### Lead Management
-- `POST /leads` - Create lead
+### 🎯 **Business Management**
+- `POST /leads` - Create new lead
 - `POST /support-tickets` - Create support ticket
+
+### 📊 **System Endpoints**
+- `GET /docs` - Interactive API documentation
+- `GET /health` - System health status
 
 ## 🛡️ Security
 
@@ -176,29 +241,55 @@ The bot automatically notifies your team when:
 ### Docker Deployment
 
 ```bash
-# Build and run with Docker
-docker build -t whatsapp-bot .
-docker run -p 8000:8000 --env-file .env whatsapp-bot
+# Build and run with Docker Compose (Recommended)
+cd chatbot
+docker-compose up --build
+
+# Or build and run individual container
+docker build -t vertex-ai-bot .
+docker run -p 8000:8000 --env-file .env vertex-ai-bot
 ```
+
+**Docker Features:**
+- Production-ready containerization
+- Environment variable management
+- Health checks and monitoring
+- Hot reload for development
+- Automatic restart policies
 
 ## 📝 Development
 
 ### Project Structure
 
 ```
-├── chatbot/                 # FastAPI backend
-│   ├── main.py             # Main application
-│   ├── whatssms_service.py # WhatsApp service
-│   ├── llama_helper.py     # AI integration
-│   ├── models.py           # Database models
-│   └── requirements.txt    # Python dependencies
-├── src/                    # React frontend
-│   ├── App.jsx            # Main component
-│   ├── components/        # React components
-│   └── package.json       # Node dependencies
-├── .env.example           # Environment template
-├── .gitignore            # Git ignore rules
-└── README.md             # This file
+├── chatbot/                    # FastAPI backend
+│   ├── main.py                # Main application with dual bot endpoints
+│   ├── whatssms_service.py    # WhatsApp service integration
+│   ├── message_classifier.py  # Message classification logic
+│   ├── models.py              # Database models
+│   ├── schemas.py             # Pydantic schemas
+│   ├── crud.py                # Database operations
+│   ├── utils.py               # Utility functions
+│   ├── db.py                  # Database connection
+│   ├── Dockerfile             # Docker configuration
+│   ├── docker-compose.yml     # Docker Compose setup
+│   ├── env.example            # Environment template
+│   └── requirements.txt       # Python dependencies
+├── src/                       # React frontend (Web Chat Bot)
+│   ├── App.jsx               # Main chat interface
+│   ├── components/           # React components
+│   │   ├── Message.jsx       # Message component
+│   │   ├── WhatsAppButton.jsx # WhatsApp integration button
+│   │   ├── WhatsAppChat.jsx  # WhatsApp chat interface
+│   │   ├── ContactForm.jsx   # Contact form component
+│   │   └── SupportTicketForm.jsx # Support ticket form
+│   ├── index.js              # React entry point
+│   ├── index.css             # Global styles
+│   └── package.json          # Node dependencies
+├── public/                    # Static assets
+├── .env.example              # Environment template
+├── .gitignore               # Git ignore rules
+└── README.md                # This file
 ```
 
 ### Contributing
@@ -229,4 +320,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Made with ❤️ by Vertex AI Tech**
+**Made with ❤️ by Hammad ALi**
